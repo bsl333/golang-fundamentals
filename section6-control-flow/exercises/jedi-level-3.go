@@ -94,4 +94,6 @@ func main() {
 	default:
 		fmt.Println("\t", "IDK your fav sport")
 	}
+	fmt.Printf("%T\n", 200)
+	fmt.Println(100, 200)
 }

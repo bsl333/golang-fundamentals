@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 type person struct {
-	first string
+	first string // IDENTIFIER and TYPE
 	last  string
 	age   int
 }

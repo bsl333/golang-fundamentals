@@ -1,4 +1,4 @@
-package getEx
+package jsonDb
 
 import (
 	"encoding/json"

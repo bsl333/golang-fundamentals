@@ -1,7 +1,6 @@
-package main
+package marshaling
 
 import (
-	"course-material/section11-application/getEx"
 	"encoding/json"
 	"fmt"
 )
@@ -20,8 +19,7 @@ type decodeJsonToPerson struct {
 	Age       int    `json:"age"`
 }
 
-func main() {
-	getEx.RetrieveUsers()
+func Marshaling() {
 	fmt.Println("Marshel and Unmarshel")
 
 	p1 := encodePersonToJson{

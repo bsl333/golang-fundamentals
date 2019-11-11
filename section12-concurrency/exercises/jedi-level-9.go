@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"sync"
+	"sync/atomic"
 )
 
 func main() {
@@ -19,6 +20,9 @@ func main() {
 
 	fmt.Println("Ex 4: Fix example 3 to eliminate race conditions")
 	example4()
+
+	fmt.Println("Ex 5: Fix example 3 using atomic package")
+	example5()
 }
 
 func example1() {
@@ -115,7 +119,6 @@ func example4() {
 		go func() {
 			mutex.Lock()
 			temp := counter
-			runtime.Gosched()
 			temp++
 			counter = temp
 			fmt.Println("counter", counter)
@@ -126,4 +129,25 @@ func example4() {
 	wg.Wait()
 	fmt.Println("Done")
 	fmt.Println(runtime.NumGoroutine())
+}
+
+func example5() {
+	/******
+	* Ex 5: fix ex 3 via atomic package
+	******/
+	var counter int64
+	goRoutines := 10
+	var wg sync.WaitGroup
+	wg.Add(goRoutines)
+
+	for ; goRoutines != 0; goRoutines-- {
+		go func() {
+			atomic.AddInt64(&counter, 1) // will increment counter by 1
+			runtime.Gosched()
+			fmt.Println("counter", atomic.LoadInt64(&counter))
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	fmt.Println(counter)
 }

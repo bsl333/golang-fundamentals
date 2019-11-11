@@ -10,12 +10,15 @@ func main() {
 	fmt.Println("Ex 1: Launch two new go routines and use wait group for them to finish and return results")
 	example1()
 
-	fmt.Println("Ex 2: method sets")
+	fmt.Println("Ex 2: Method sets")
 	fmt.Print("\t")
 	example2()
 
-	fmt.Println("Ex 3: create a race condition via an incrementer program")
+	fmt.Println("Ex 3: Create a race condition via an incrementer program")
 	example3()
+
+	fmt.Println("Ex 4: Fix example 3 to eliminate race conditions")
+	example4()
 }
 
 func example1() {
@@ -85,14 +88,42 @@ func example3() {
 	for ; goRoutines != 0; goRoutines-- {
 		go func() {
 			temp := counter
-			runtime.Gosched()
+			// runtime.Gosched()
 			temp++
 			counter = temp
 			fmt.Println("counter", counter)
 			wg.Done()
 		}()
 	}
+	wg.Wait()
+	fmt.Println(counter)
 	fmt.Println("Done")
 	fmt.Println(runtime.NumGoroutine())
+}
+
+func example4() {
+	/******
+	* Ex 4: fix example 3 with mutexes to prevent race conditions
+	******/
+	counter := 0
+	goRoutines := 50
+	var wg sync.WaitGroup
+	var mutex sync.Mutex
+	wg.Add(goRoutines)
+
+	for ; goRoutines != 0; goRoutines-- {
+		go func() {
+			mutex.Lock()
+			temp := counter
+			runtime.Gosched()
+			temp++
+			counter = temp
+			fmt.Println("counter", counter)
+			mutex.Unlock()
+			wg.Done()
+		}()
+	}
 	wg.Wait()
+	fmt.Println("Done")
+	fmt.Println(runtime.NumGoroutine())
 }

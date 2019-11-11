@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	// sampleWaitGroup()
+	sampleWaitGroup()
 	mockRaceCondition()
 }
 

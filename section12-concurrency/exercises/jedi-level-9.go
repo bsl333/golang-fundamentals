@@ -23,6 +23,9 @@ func main() {
 
 	fmt.Println("Ex 5: Fix example 3 using atomic package")
 	example5()
+
+	fmt.Println("Ex 6: Create a program that prints out your OS and ARCH.")
+	example6()
 }
 
 func example1() {
@@ -150,4 +153,14 @@ func example5() {
 	}
 	wg.Wait()
 	fmt.Println(counter)
+}
+
+func example6() {
+	/******
+	* Ex 6: Create a program that prints out your OS and ARCH. Use the following commands to run it
+	* go run, build, install
+	******/
+
+	fmt.Println("OS", runtime.GOOS)
+	fmt.Println("ARCH", runtime.GOARCH)
 }

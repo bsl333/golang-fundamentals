@@ -13,6 +13,9 @@ func main() {
 	fmt.Println("Ex 2: method sets")
 	fmt.Print("\t")
 	example2()
+
+	fmt.Println("Ex 3: create a race condition via an incrementer program")
+	example3()
 }
 
 func example1() {
@@ -65,4 +68,31 @@ func example2() {
 	// saySomething(p) // won't work, as saySomething expects the pointer to p.
 	saySomething(&p)
 
+}
+
+func example3() {
+	/******
+	* Ex 3: Using goroutines, create an incrementer program
+	* read the incrementer value, store it in a new variable, yield the processor with runtime.Gosched(), increment the new variable
+	* show that a race condition is raised
+	******/
+
+	counter := 0
+	goRoutines := 50
+	var wg sync.WaitGroup
+	wg.Add(goRoutines)
+
+	for ; goRoutines != 0; goRoutines-- {
+		go func() {
+			temp := counter
+			runtime.Gosched()
+			temp++
+			counter = temp
+			fmt.Println("counter", counter)
+			wg.Done()
+		}()
+	}
+	fmt.Println("Done")
+	fmt.Println(runtime.NumGoroutine())
+	wg.Wait()
 }
